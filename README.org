@@ -1,0 +1,10 @@
+#+Title: YOU DIED
+#+Author: Daniel "YOU DIED" Bordak
+
+YOU DIED
+
+* Usage:
+
+./dshlock <font>
+
+[[http://www.dafont.com/day-roman.font?fpp=50&psize=l&text=YOU+DIED][YOU DIED]]
