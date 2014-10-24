@@ -1,0 +1,35 @@
+#!/bin/sh
+
+if [[ $# -ne 0 ]] ; then
+	set -- "-font" $1
+fi
+
+# Get screenshot
+import -window root /tmp/screenshot.png
+
+# Create Gradient Palette
+convert /tmp/screenshot.png \
+        -channel G -fx 'j/h' \
+        -separate /tmp/you_died_gradient.gif
+
+# Create Gradient Overlay
+convert /tmp/you_died_gradient.gif \
+        -function sinusoid 1,90 \
+        /tmp/you_died_gradient.gif
+
+# Apply overlay
+composite /tmp/screenshot.png -compose Multiply /tmp/you_died_gradient.gif \
+          /tmp/screenshot.png
+
+# Add words & grayscale
+convert /tmp/screenshot.png \
+        -type Grayscale \
+        -gravity Center \
+        "$@" \
+        -stroke "#5d0d0d" -fill "#5d0d0d" \
+        -pointsize 120 \
+        -annotate 0 "YOU DIED" \
+        /tmp/screenshot.png
+
+i3lock -i /tmp/screenshot.png
+# feh /tmp/screenshot.png
