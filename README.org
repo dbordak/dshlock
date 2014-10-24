@@ -7,4 +7,8 @@ YOU DIED
 
 ./dshlock <font>
 
-[[http://www.dafont.com/day-roman.font?fpp=50&psize=l&text=YOU+DIED][YOU DIED]]
+* Requirements:
+
+- imagemagick
+- i3lock
+- [[http://www.dafont.com/day-roman.font?fpp=50&psize=l&text=YOU+DIED][YOU DIED]]
