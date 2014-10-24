@@ -4,20 +4,20 @@ if [[ $# -ne 0 ]] ; then
 	set -- "-font" $1
 fi
 
-# Create config folder
-config_dir=$HOME/.config/dshlock
-mkdir -p $config_dir
+# Create cache folder
+cache_dir=$HOME/.cache/dshlock
+mkdir -p $cache_dir
 
 # Get screen resolution
 size=$(xrandr  | grep \* | cut -d' ' -f4)
-grad_filename=$config_dir/gradient-${size}.gif
+grad_filename=$cache_dir/gradient-${size}.gif
 
-# Get screenshot
+# Get grayscale screenshot
 gm import -window root -colorspace GRAY /tmp/screenshot.png
 
 # Create Gradient if it doesn't exist
 if [[ ! -f $grad_filename ]] ; then
-	gm convert -size $size gradient: \
+	convert -size $size gradient: \
 	        -function sinusoid 1,90 \
 	        $grad_filename
 fi
@@ -26,11 +26,11 @@ fi
 gm composite /tmp/screenshot.png -compose Multiply $grad_filename \
           /tmp/screenshot.png
 
-# Add words & grayscale
+# Add words
 gm convert /tmp/screenshot.png \
         -gravity Center \
         "$@" \
-        -stroke "#5d0d0d" -fill "#5d0d0d" \
+        -fill "#5d0d0d" \
         -pointsize 120 \
         -draw "text 0,0 'YOU DIED'" \
         /tmp/screenshot.png
