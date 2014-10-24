@@ -4,21 +4,26 @@ if [[ $# -ne 0 ]] ; then
 	set -- "-font" $1
 fi
 
+# Create config folder
+config_dir=$HOME/.config/dshlock
+mkdir -p $config_dir
+
+# Get screen resolution
+size=$(xrandr  | grep \* | cut -d' ' -f4)
+grad_filename=$config_dir/gradient-${size}.gif
+
 # Get screenshot
 import -window root /tmp/screenshot.png
 
-# Create Gradient Palette
-convert /tmp/screenshot.png \
-        -channel G -fx 'j/h' \
-        -separate /tmp/you_died_gradient.gif
-
-# Create Gradient Overlay
-convert /tmp/you_died_gradient.gif \
-        -function sinusoid 1,90 \
-        /tmp/you_died_gradient.gif
+# Create Gradient if it doesn't exist
+if [[ ! -f $grad_filename ]] ; then
+	convert -size $size gradient: \
+	        -function sinusoid 1,90 \
+	        $grad_filename
+fi
 
 # Apply overlay
-composite /tmp/screenshot.png -compose Multiply /tmp/you_died_gradient.gif \
+composite /tmp/screenshot.png -compose Multiply $grad_filename \
           /tmp/screenshot.png
 
 # Add words & grayscale
@@ -31,5 +36,5 @@ convert /tmp/screenshot.png \
         -annotate 0 "YOU DIED" \
         /tmp/screenshot.png
 
-i3lock -i /tmp/screenshot.png
-# feh /tmp/screenshot.png
+# i3lock -i /tmp/screenshot.png
+feh /tmp/screenshot.png
