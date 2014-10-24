@@ -15,3 +15,9 @@ YOU DIED
 - imagemagick
 - xrandr
 - [[http://www.dafont.com/day-roman.font?fpp=50&psize=l&text=YOU+DIED][YOU DIED]]
+
+* Slow?
+
+Try the gm branch. It uses graphicksmagick instead and is much faster.
+
+I mean, YOU DIED
