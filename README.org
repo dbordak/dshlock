@@ -9,6 +9,7 @@ YOU DIED
 
 * Requirements:
 
-- imagemagick
 - i3lock
+- imagemagick
+- xrandr
 - [[http://www.dafont.com/day-roman.font?fpp=50&psize=l&text=YOU+DIED][YOU DIED]]
