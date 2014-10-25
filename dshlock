@@ -6,13 +6,9 @@ fi
 
 # Use Graphicksmagic if we have it
 if command -v gm >/dev/null; then
-	IMPORT="gm import"
-	CONVERT="gm convert"
-	COMPOSITE="gm composite"
+	GM="gm"
 else
-	IMPORT="import"
-	CONVERT="convert"
-	COMPOSITE="composite"
+	GM=""
 fi
 
 # Set filepaths
@@ -20,29 +16,29 @@ IMAGE="/tmp/screenshot.png"
 GRADIENT="/tmp/you_died_gradient.jpg"
 
 # Get grayscale screenshot
-$IMPORT -window root \
-        -colorspace GRAY \
-        $IMAGE
+$GM import -window root \
+           -colorspace GRAY \
+           $IMAGE
 
 # Get screen resolution
 SIZE=$(xrandr  | grep \* | cut -d' ' -f4)
 
 # Create Gradient
 echo "P2 1 11 8  8 8 8 8 1 1 1 8 8 8 8 " | \
-	$CONVERT - -filter cubic -resize $SIZE\! $GRADIENT
+	$GM convert - -filter cubic -resize $SIZE\! $GRADIENT
 
 # Apply overlay
-$COMPOSITE $IMAGE -compose Multiply $GRADIENT \
-           $IMAGE
+$GM composite $IMAGE -compose Multiply $GRADIENT \
+              $IMAGE
 
 # Add words
-$CONVERT $IMAGE \
-         -gravity Center \
-         "$@" \
-         -fill "#5d0d0d" \
-         -pointsize 120 \
-         -draw "text 0,0 'YOU DIED'" \
-         $IMAGE
+$GM convert $IMAGE \
+            -gravity Center \
+            "$@" \
+            -fill "#5d0d0d" \
+            -pointsize 120 \
+            -draw "text 0,0 'YOU DIED'" \
+            $IMAGE
 
-#i3lock -i $IMAGE
-feh $IMAGE
+i3lock -i $IMAGE
+# feh $IMAGE
