@@ -15,38 +15,34 @@ else
 	COMPOSITE="composite"
 fi
 
-# Create cache folder
-cache_dir=$HOME/.cache/dshlock
-mkdir -p $cache_dir
-
-# Get screen resolution
-size=$(xrandr  | grep \* | cut -d' ' -f4)
-grad_filename=$cache_dir/gradient-${size}.png
+# Set filepaths
+IMAGE="/tmp/screenshot.png"
+GRADIENT="/tmp/you_died_gradient.jpg"
 
 # Get grayscale screenshot
 $IMPORT -window root \
         -colorspace GRAY \
-        /tmp/screenshot.png
+        $IMAGE
 
-# Create Gradient if it doesn't exist
-if [[ ! -f $grad_filename ]] ; then
-	convert -size $size gradient: \
-	        -function sinusoid 1,90 \
-	        $grad_filename
-fi
+# Get screen resolution
+SIZE=$(xrandr  | grep \* | cut -d' ' -f4)
+
+# Create Gradient
+echo "P2 1 11 8  8 8 8 8 1 1 1 8 8 8 8 " | \
+	$CONVERT - -filter cubic -resize $SIZE\! $GRADIENT
 
 # Apply overlay
-$COMPOSITE /tmp/screenshot.png -compose Multiply $grad_filename \
-           /tmp/screenshot.png
+$COMPOSITE $IMAGE -compose Multiply $GRADIENT \
+           $IMAGE
 
 # Add words
-$CONVERT /tmp/screenshot.png \
+$CONVERT $IMAGE \
          -gravity Center \
          "$@" \
          -fill "#5d0d0d" \
          -pointsize 120 \
          -draw "text 0,0 'YOU DIED'" \
-         /tmp/screenshot.png
+         $IMAGE
 
-i3lock -i /tmp/screenshot.png
-# feh /tmp/screenshot.png
+#i3lock -i $IMAGE
+feh $IMAGE
