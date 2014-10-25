@@ -4,6 +4,17 @@ if [[ $# -ne 0 ]] ; then
 	set -- "-font" $1
 fi
 
+# Use Graphicksmagic if we have it
+if command -v gm >/dev/null; then
+	IMPORT="gm import"
+	CONVERT="gm convert"
+	COMPOSITE="gm composite"
+else
+	IMPORT="import"
+	CONVERT="convert"
+	COMPOSITE="composite"
+fi
+
 # Create cache folder
 cache_dir=$HOME/.cache/dshlock
 mkdir -p $cache_dir
@@ -13,9 +24,9 @@ size=$(xrandr  | grep \* | cut -d' ' -f4)
 grad_filename=$cache_dir/gradient-${size}.gif
 
 # Get grayscale screenshot
-import -window root \
-       -colorspace GRAY \
-       /tmp/screenshot.png
+$IMPORT -window root \
+        -colorspace GRAY \
+        /tmp/screenshot.png
 
 # Create Gradient if it doesn't exist
 if [[ ! -f $grad_filename ]] ; then
@@ -25,17 +36,17 @@ if [[ ! -f $grad_filename ]] ; then
 fi
 
 # Apply overlay
-composite /tmp/screenshot.png -compose Multiply $grad_filename \
-          /tmp/screenshot.png
+$COMPOSITE /tmp/screenshot.png -compose Multiply $grad_filename \
+           /tmp/screenshot.png
 
 # Add words
-convert /tmp/screenshot.png \
-        -gravity Center \
-        "$@" \
-        -fill "#5d0d0d" \
-        -pointsize 120 \
-        -draw "text 0,0 'YOU DIED'" \
-        /tmp/screenshot.png
+$CONVERT /tmp/screenshot.png \
+         -gravity Center \
+         "$@" \
+         -fill "#5d0d0d" \
+         -pointsize 120 \
+         -draw "text 0,0 'YOU DIED'" \
+         /tmp/screenshot.png
 
 i3lock -i /tmp/screenshot.png
 # feh /tmp/screenshot.png
