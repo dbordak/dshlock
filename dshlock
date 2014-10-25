@@ -21,7 +21,7 @@ mkdir -p $cache_dir
 
 # Get screen resolution
 size=$(xrandr  | grep \* | cut -d' ' -f4)
-grad_filename=$cache_dir/gradient-${size}.gif
+grad_filename=$cache_dir/gradient-${size}.png
 
 # Get grayscale screenshot
 $IMPORT -window root \
