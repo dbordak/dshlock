@@ -3,6 +3,8 @@
 
 YOU DIED
 
+[[./example.png]]
+
 * Usage:
 
 ./dshlock <font>
